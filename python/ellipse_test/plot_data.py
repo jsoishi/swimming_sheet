@@ -28,7 +28,7 @@ def main(filename, start, count, output):
     title_func = lambda sim_time: 't = {:.3f}'.format(sim_time)
     savename_func = lambda write: 'write_{:06}.png'.format(write)
     # Layout
-    nrows, ncols = 1, 1
+    nrows, ncols = 2, 2
     image = plot_tools.Box(2*np.pi, 2*np.pi)
     pad = plot_tools.Frame(0.2, 0.2, 0.1, 0.1)
     margin = plot_tools.Frame(0.3, 0.2, 0.1, 0.1)
