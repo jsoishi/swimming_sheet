@@ -23,15 +23,15 @@ def main(filename, start, count, output):
 
     # Plot settings
     tasks = ['p','u','v','ωz']
-    scale = 2.5
+    scale = 1.
     dpi = 100
     title_func = lambda sim_time: 't = {:.3f}'.format(sim_time)
     savename_func = lambda write: 'write_{:06}.png'.format(write)
     # Layout
     nrows, ncols = 2, 2
     image = plot_tools.Box(2*np.pi, 2*np.pi)
-    pad = plot_tools.Frame(0.2, 0.2, 0.1, 0.1)
-    margin = plot_tools.Frame(0.3, 0.2, 0.1, 0.1)
+    pad = plot_tools.Frame(0.9, 0.9, 0.9, 0.9)
+    margin = plot_tools.Frame(0.3, 0.3, 0.2, 0.2)
 
     # Create multifigure
     mfig = plot_tools.MultiFigure(nrows, ncols, image, pad, margin, scale)
