@@ -64,7 +64,7 @@ problem.parameters['ν']   = ν
 problem.parameters['γ']   = γ
 problem.parameters['K']   = K
 problem.parameters['V']   = V
-problem.add_equation("dt(u) + ν*dy(ωz) + dx(p) =  ωz*v -γ*K")
+problem.add_equation("dt(u) + ν*dy(ωz) + dx(p) =  ωz*v -γ*K*u")
 problem.add_equation("dt(v) - ν*dx(ωz) + dy(p) = -ωz*u -γ*K*(v-V)")
 problem.add_equation("ωz + dy(u) - dx(v) = 0")
 problem.add_equation("dx(u) + dy(v) = 0",condition="(nx != 0) or (ny != 0)")
@@ -79,9 +79,10 @@ logger.info('Solver built')
 u = solver.state['u']
 
 # Integration parameters
-solver.stop_sim_time = np.inf
+t_wave = 2*np.pi/sigma
+solver.stop_sim_time = 2*t_wave #np.inf
 solver.stop_wall_time = 10*60*60.
-solver.stop_iteration = 1000#np.inf
+solver.stop_iteration = np.inf
 
 # Analysis
 snapshots = solver.evaluator.add_file_handler('snapshots_test', iter=20, max_writes=50)
@@ -89,6 +90,8 @@ snapshots.add_task("p")
 snapshots.add_task("u")
 snapshots.add_task("v")
 snapshots.add_task("ωz")
+snapshots.add_task("K")
+snapshots.add_task("V")
 
 # Runtime monitoring properties
 flow = flow_tools.GlobalFlowProperty(solver, cadence=20)
@@ -110,7 +113,7 @@ try:
         #F0,G0,τ0 = F0/μ, G0/μ - gravity, τ0/(μ*I)
         #y0 = y0 + V0*dt
         #V0 = V0 + G0*dt
-        K['g'],V['g'] =  bdy.sheet(x, y, k, sigma, 0, delta, hw, b)
+        K['g'],V['g'] =  bdy.sheet(x, y, k, sigma, solver.sim_time, delta, hw, b)
         if (solver.iteration-1) % 20 == 0:
             logger.info('Iteration: %i, Time: %e, dt: %e' %(solver.iteration, solver.sim_time, dt))
             logger.info('Max ωz = %f' %flow.max('q'))
